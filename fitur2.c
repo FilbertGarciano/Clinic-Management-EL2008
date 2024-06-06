@@ -301,6 +301,7 @@ char tokenKontrol[255];
     printf("2.Mengubah riwayat kedatangan\n");
     printf("3.Menghapus riwayat kedatangan\n");
     printf("4.Mencari riwayat kedatangan\n");
+    printf("5.Tampilkan semua riwayat kedatangan\n");
     printf("Masukkan pilihan: ");
 
     scanf("%d" , &pilihanfitur);
@@ -400,6 +401,7 @@ char tokenKontrol[255];
         printf("2.Mengubah riwayat kedatangan\n");
         printf("3.Menghapus riwayat kedatangan\n");
         printf("4.Mencari riwayat kedatangan\n");
+        printf("5.Tampilkan semua riwayat kedatangan\n");
 
         printf("Masukkan pilihan selanjutnya: ");
 
