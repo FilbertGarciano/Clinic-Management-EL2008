@@ -157,6 +157,56 @@ void ubahRiwayat(struct riwayat **head, char ID[] , int Tanggal , int Bulan , in
     return;
 }
 
+void hapusRiwayat(struct riwayat **head, char ID[] , int Tanggal , int Bulan , int Tahun) {
+    struct riwayat *tinjau = *head;
+    struct riwayat *prev = NULL;
+
+    while (tinjau != NULL) {
+        if ((strcmp(tinjau->ID, ID) == 0) && (tinjau->Tanggal == Tanggal) && (tinjau->Bulan == Bulan) && (tinjau->Tahun == Tahun)) {
+            if (prev == NULL) {
+                *head = tinjau->next;
+            } else {
+                prev->next = tinjau->next;
+            }
+            free(tinjau);
+            printf("Data pada tanggal %.2d-%.2d-%d dengan ID %s berhasil dihapus\n",Tanggal , Bulan , Tahun , ID);
+            return;
+        }
+        prev = tinjau;
+        tinjau = tinjau->next;
+    }
+
+    printf("Data pada tanggal %.2d-%.2d-%d dengan ID %s tidak ditemukan\n",Tanggal , Bulan , Tahun , ID);
+    return;
+}
+
+void cariRiwayat(struct riwayat **head, char ID[] , int Tanggal , int Bulan , int Tahun){
+    struct riwayat *tinjau = *head;
+    struct riwayat *prev = NULL;
+
+    while (tinjau != NULL) {
+        if ((strcmp(tinjau->ID, ID) == 0) && (tinjau->Tanggal == Tanggal) && (tinjau->Bulan == Bulan) && (tinjau->Tahun == Tahun)){
+            printf("No: %d\n", tinjau->nomor);
+            printf("Tanggal %d ", tinjau->Tanggal);
+            printf("%d ", tinjau->Bulan);
+            printf("%d\n", tinjau->Tahun);
+            printf("ID: %s\n", tinjau->ID);
+            printf("Diagnosis: %s\n", tinjau->Diagnosis);
+            printf("Tindakan: %s\n", tinjau->Tindakan);
+            printf("Kontrol: %d ", tinjau->TanggalKontrol);
+            printf("%d ", tinjau->BulanKontrol);
+            printf("%d\n", tinjau->TahunKontrol);
+            printf("Biaya: %d\n\n", tinjau->biaya);
+            return;
+        }
+        prev = tinjau;
+        tinjau = tinjau->next;
+    }
+
+    printf("Data pada tanggal %.2d-%.2d-%d dengan ID %s tidak ditemukan\n",Tanggal , Bulan , Tahun , ID);
+    return;
+}
+
 
 int main(){
     
@@ -185,7 +235,7 @@ char tokenKontrol[255];
     printf("Masukkan Nama File: ");
     scanf("%s", namafile);
 
-    FILE* stream = fopen(namafile, "r+");
+    FILE* stream = fopen(namafile, "r");
     if (stream == NULL){
         printf("File tidak ditemukan");
         return 0;
@@ -256,6 +306,12 @@ char tokenKontrol[255];
     scanf("%d" , &pilihanfitur);
 
     while(pilihanfitur != 0){
+            char IDUBAH[255];
+            char TanggalUbah[255];
+            int Tanggal;
+            int Bulan;
+            int Tahun;
+
         if (pilihanfitur == 1){
             strcpy(tokenTanggal , "");
             tempTanggal = 0;
@@ -295,14 +351,7 @@ char tokenKontrol[255];
 
         }
         else if(pilihanfitur == 2){
-            char IDUBAH[255];
-            char TanggalUbah[255];
-            int Found = 0;
-            int Tanggal;
-            int Bulan;
-            int Tahun;
-
-            printf("Taggal Input Data yang ingin diubah (Format : DD-MM-YYYY): ");
+            printf("Tanggal Input Data yang ingin diubah (Format : DD-MM-YYYY): ");
             scanf("%s" , TanggalUbah);
             parseDate(TanggalUbah , &Tanggal , &Bulan , &Tahun);
 
@@ -312,10 +361,34 @@ char tokenKontrol[255];
             strcat(IDUBAH , " ");
             strcat(IDUBAH , Vessel);
 
-
-
             ubahRiwayat(&head , IDUBAH , Tanggal , Bulan , Tahun);
             
+        }
+        else if(pilihanfitur == 3){
+            printf("Tanggal Input Data yang ingin dihapus (Format : DD-MM-YYYY): ");
+            scanf("%s" , TanggalUbah);
+            parseDate(TanggalUbah , &Tanggal , &Bulan , &Tahun);
+
+            printf("ID Data yang ingin dihapus: ");
+            scanf("%s" , IDUBAH);
+            scanf("%s" , Vessel);
+            strcat(IDUBAH , " ");
+            strcat(IDUBAH , Vessel);
+
+            hapusRiwayat(&head , IDUBAH , Tanggal , Bulan , Tahun);
+        }
+        else if(pilihanfitur == 4){
+            printf("Tanggal Input Data yang ingin dicari (Format : DD-MM-YYYY): ");
+            scanf("%s" , TanggalUbah);
+            parseDate(TanggalUbah , &Tanggal , &Bulan , &Tahun);
+
+            printf("ID Data yang ingin dicari: ");
+            scanf("%s" , IDUBAH);
+            scanf("%s" , Vessel);
+            strcat(IDUBAH , " ");
+            strcat(IDUBAH , Vessel);
+
+            cariRiwayat(&head , IDUBAH , Tanggal , Bulan , Tahun);
         }
         else if(pilihanfitur == 5){
             printList(head);
@@ -332,5 +405,16 @@ char tokenKontrol[255];
 
         scanf("%d" , &pilihanfitur);
     }
+    fclose(stream);
 
+    stream = fopen(namafile, "w");
+
+    while (head != NULL) {
+        fprintf(stream , "%d,%.2d-%.2d-%.4d,%s,%s,%s,%.2d-%.2d-%.4d,%d" , head -> nomor , head -> Tanggal , head -> Bulan , head ->Tahun , head -> ID , head-> Diagnosis , head -> Tindakan , head-> TanggalKontrol , head->BulanKontrol , head->TahunKontrol , head->biaya);
+        fprintf(stream , "\n");
+        head = head->next;
+    }
+    printf("\n");
+
+    fclose(stream);
 }
