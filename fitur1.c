@@ -131,14 +131,20 @@ int getMonthFromString(char *month_str) {
 void formatDate(char *tanggal_lahir) {
     int day, year;
     char month[20];
+    int month_num; // menyimpan bulan dalam integer
+    // Cek apakah format sudah DD-MM-YYYY
+    if (sscanf(tanggal_lahir, "%d-%d-%d", &day, &month_num, &year) == 3) {
+        sprintf(tanggal_lahir, "%02d-%02d-%d", day, month_num, year);
+        return;
+    }
     // Cek untuk format DD Month YYYY
     if (sscanf(tanggal_lahir, "%d %s %d", &day, month, &year) == 3) {
-        int month_num = getMonthFromString(month);
+        month_num = getMonthFromString(month);
         sprintf(tanggal_lahir, "%02d-%02d-%d", day, month_num, year);
     }
     // Cek untuk format DD-Month-YY
     else if (sscanf(tanggal_lahir, "%d-%[^-]-%d", &day, month, &year) == 3) {
-        int month_num = getMonthFromString(month);
+        month_num = getMonthFromString(month);
         // Ubah format YY ke YYYY
         year += (year < 50) ? 2000 : 1900;
         sprintf(tanggal_lahir, "%02d-%02d-%d", day, month_num, year);
@@ -309,4 +315,3 @@ int main() {
     menu(&head);
     return 0;
 }
- 
