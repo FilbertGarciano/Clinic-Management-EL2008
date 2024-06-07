@@ -138,7 +138,7 @@ void TanggalRemake(char tanggal[], char p_tanggal[]){
 void search(DataPasien*data, char ID[]){
     char nama[100]; 
     printf("Masukkan Nama Pasien yang ingin dicari : "); 
-    gets(nama);
+    scanf(" %[^\n]s", nama);
     // Konversi dari nama ke ID untuk mengakses secara lebih apa saja yang telah dilakukan
     while(data != NULL){ 
         if(strcasecmp(data->Nama_Lengkap, nama) == 0){
@@ -231,7 +231,7 @@ void riwayat(DataTindakan**data_T, char ID[]){
 void kontrol(DataPasien **data1, DataTindakan**data2){
     char input[100], ID[100]; 
     printf("Masukkan Tanggal Kontrol dalam Format(Hari Bulan Tahun): ");
-    gets(input);
+    scanf(" %[^\n]s", input);
     printf("Pasien yang perlu untuk dikontrol pada tanggal %s : \n\n", input); 
     DataTindakan *head = *data2;
     int jumlah = 1; 
@@ -269,8 +269,8 @@ int main(){
     Pasien(&head1);
     Tindakan(&head2);
     // Fitur no 3
-    //search(head1, ID);
-    //riwayat(&head2, ID);
+    search(head1, ID);
+    riwayat(&head2, ID);
     // Fitur no 6
     kontrol(&head1, &head2); 
 }
