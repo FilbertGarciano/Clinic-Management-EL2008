@@ -88,7 +88,7 @@ void DataPenyakit(char string1[], char string2[], int opsi){
         char star[100]; 
         if(opsi == 1){
             if((strcasecmp(bulan, string1) == 0) && strcmp(tahun, string2) == 0){
-                for (i = 0; i < JPenyakit; ++i) {
+                for (i = 0; i < JPenyakit; i++) {
                     if (strcmp(penyakit[i].penyakit, wabah) == 0) {
                         ada = 1;
                         penyakit[i].banyak++;
@@ -104,7 +104,7 @@ void DataPenyakit(char string1[], char string2[], int opsi){
         }
         else{
             if(strcmp(tahun, string2) == 0){
-                for (i = 0; i < JPenyakit; ++i) {
+                for (i = 0; i < JPenyakit; i++) {
                     if (strcmp(penyakit[i].penyakit, wabah) == 0) {
                         ada = 1;
                         penyakit[i].banyak++;
