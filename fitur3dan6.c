@@ -20,7 +20,7 @@ void Pasien(DataPasien **head){
     char *token;
     int count = 0; 
     // Sesuaikan ini dengan data csv yang digunakan untuk data pasien
-    FILE* address = fopen("Data Pasien.csv", "r");
+    FILE* address = fopen("DataPasien.csv", "r");
     while (fgets(line, 1000, address)) {
         DataPasien *data = (DataPasien*) malloc(sizeof(DataPasien));
         token = strtok(line, ","); 
@@ -71,7 +71,7 @@ void Tindakan(DataTindakan **head) {
     char *token;
     int count = 0; 
     // Sesuaikan ini dengan data csv yang digunakan untuk data riwayat
-    FILE* address = fopen("Riwayat Pasien.csv", "r");
+    FILE* address = fopen("RiwayatPasien.csv", "r");
     while (fgets(line, 1000, address)) {
         DataTindakan *data = (DataTindakan*) malloc(sizeof(DataTindakan));
         token = strtok(line, ","); 
@@ -143,7 +143,7 @@ void search(DataPasien*data, char ID[]){
     while(data != NULL){ 
         if(strcasecmp(data->Nama_Lengkap, nama) == 0){
             strcpy(ID, data->ID);
-            printf("Nama Lengkap : %s\n", data->Nama_Lengkap);
+            printf("\nNama Lengkap : %s\n", data->Nama_Lengkap);
             printf("ID : %s\n", data-> ID);
             printf("Alamat : %s\n", data->Alamat);
             printf("No BPJS : %s\n", data->BPJS);
@@ -235,7 +235,7 @@ void riwayat(DataTindakan**data_T, char ID[]){
 void kontrol(DataPasien **data1, DataTindakan**data2){
     char input[100], ID[100]; 
     int banyak = 0; 
-    printf("Masukkan Tanggal Kontrol dalam Format(Contoh: 6 September 2023): ");
+    printf("Masukkan Tanggal Kontrol dalam Format (Contoh: 6 September 2023): ");
     scanf(" %[^\n]s", input);
     printf("Pasien yang perlu untuk dikontrol pada tanggal %s : \n", input); 
     DataTindakan *head = *data2;
@@ -249,7 +249,8 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
             while(body != NULL){
                 // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0 
                 if (strcmp(body->ID, ID) == 0) {
-                    printf("%d. \n", jumlah); 
+                    printf("\n");
+                    printf("Pasien ke-%d \n", jumlah); 
                     printf("Nama : %s\n", body->Nama_Lengkap);
                     char ntanggal[100]; 
                     TanggalRemake(body->Tanggal_Lahir, ntanggal); 
@@ -258,7 +259,6 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
                     printf("ID : %s\n", body -> ID);
                     printf("Diagnosis : %s\n", head->Diagnosis);
                     printf("Tindakan : %s\n", head -> Tindakan);
-                    printf("\n");
                     jumlah ++;
                     banyak ++; 
                 }
