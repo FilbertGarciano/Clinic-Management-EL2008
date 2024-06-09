@@ -242,7 +242,7 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
     int banyak = 0; 
     printf("Masukkan Tanggal Kontrol dalam Format (Contoh: 6 September 2023): ");
     scanf(" %[^\n]s", input);
-    printf("\nPasien yang perlu untuk dikontrol pada tanggal %s : \n\n", input); 
+    printf("\nPasien yang perlu untuk dikontrol pada tanggal %s : \n", input); 
     DataTindakan *head = *data2;
     int jumlah = 1; 
     while(head != NULL){
@@ -254,7 +254,7 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
             while(body != NULL){
                 // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0 
                 if (strcmp(body->ID, ID) == 0) {
-                    printf("Pasien ke-%d \n", jumlah); 
+                    printf("\nPasien ke-%d \n", jumlah); 
                     printf("Nama : %s\n", body->Nama_Lengkap);
                     char ntanggal[100]; 
                     TanggalRemake(body->Tanggal_Lahir, ntanggal); 
