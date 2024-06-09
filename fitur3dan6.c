@@ -280,17 +280,28 @@ int main(){
     Pasien(&head1);
     Tindakan(&head2);
     int menu;
+    int loop = 1;
     printf("1. Mencari Informasi Pasien dan Riwayat Medis\n"); 
-    printf("2. Memberikan Informasi Pasien yang perlu di kontrol\n"); 
-    printf("Menu : "); 
-    scanf("%d", &menu);  
-    if (menu == 1){
-        // Fitur no 3
-        search(head1, ID);
-        riwayat(&head2, ID);
-    }
-    else{
-        // Fitur no 6
-        kontrol(&head1, &head2); 
+    printf("2. Memberikan Informasi Pasien yang perlu di kontrol\n");
+    printf("3. Exit\n");
+    while (loop == 1){
+        printf("Menu : "); 
+        scanf("%d", &menu);  
+        if (menu == 1){
+            // Fitur no 3
+            search(head1, ID);
+            riwayat(&head2, ID);
+        }
+        else if (menu == 2){
+            // Fitur no 6
+            kontrol(&head1, &head2); 
+        }
+        else if(menu == 3){
+            loop = -999; 
+        }
+        else{
+            printf("Menu Tidak Valid"); 
+        }
+
     }
 }
