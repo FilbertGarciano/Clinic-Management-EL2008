@@ -63,7 +63,7 @@ void bubbleSort(jumlah arr[], int n) {
     }
 }
 
-void DataPenyakit(char string[], int opsi){
+void DataPenyakit(char string1[], char string2[], int opsi){
     FILE*address; 
     int JPenyakit = 0; 
     char line[1000]; 
@@ -82,19 +82,20 @@ void DataPenyakit(char string[], int opsi){
         token = strtok(NULL, ","); // Kontrol
         token = strtok(NULL, "/n"); // Biaya
         int i;
-        int sudah_ada = 0;
+        int ada = 0;
         char bulan[100], tahun[100]; 
         Finder(tanggal, bulan, tahun);
+        char star[100]; 
         if(opsi == 1){
-            if(strcmp(bulan, string) == 0){
+            if((strcasecmp(bulan, string1) == 0) && strcmp(tahun, string2) == 0){
                 for (i = 0; i < JPenyakit; ++i) {
                     if (strcmp(penyakit[i].penyakit, wabah) == 0) {
-                        sudah_ada = 1;
+                        ada = 1;
                         penyakit[i].banyak++;
                         break;
                     }
                 }
-                if (sudah_ada == 0) {
+                if (ada == 0) {
                     strcpy(penyakit[JPenyakit].penyakit, wabah);
                     penyakit[JPenyakit].banyak = 1;
                     JPenyakit++;
@@ -102,15 +103,15 @@ void DataPenyakit(char string[], int opsi){
             }
         }
         else{
-            if(strcmp(tahun, string) == 0){
+            if(strcmp(tahun, string2) == 0){
                 for (i = 0; i < JPenyakit; ++i) {
                     if (strcmp(penyakit[i].penyakit, wabah) == 0) {
-                        sudah_ada = 1;
+                        ada = 1;
                         penyakit[i].banyak++;
                         break;
                     }
                 }
-                if (sudah_ada == 0) {
+                if (ada == 0) {
                     strcpy(penyakit[JPenyakit].penyakit, wabah);
                     penyakit[JPenyakit].banyak = 1;
                     JPenyakit++;
@@ -120,7 +121,12 @@ void DataPenyakit(char string[], int opsi){
     }
     fclose(address);
     if (JPenyakit == 0){
-        printf("Tidak ada penyakit pada Bulan ataupun Tahun Tersebut"); 
+        if (opsi == 1){
+            printf("Tidak ada penyakit pada Bulan Tersebut");
+        } 
+        else{
+             printf("Tidak ada penyakit pada Tahun Tersebut");
+        }
     }
     else{
         printf("Jumlah Penyakit yang terjadi Pada saat Itu:\n");
@@ -132,7 +138,7 @@ void DataPenyakit(char string[], int opsi){
 }
 
 int main(){
-    char string[10]; 
+    char string1[100], string2[100]; 
     int opsi;
     printf("=========== MENU  ===========\n");
     printf("1. Jumlah Derita Pasien per Bulan\n"); 
@@ -140,15 +146,29 @@ int main(){
     printf("==============================\n"); 
     printf("Menu: "); 
     scanf("%d", &opsi);
-    if (opsi == 1){ 
+    if (opsi == 1){
         printf("Masukkan Nama Bulan : "); 
-        scanf("%s", string); 
-        DataPenyakit(string, opsi); 
+        scanf("%s", string1);
+        int ketemu = 0; 
+        char *l_bulan[] = {"Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+        for(int i=0; i<12; i++){
+            if(strcasecmp(string1, l_bulan[i]) == 0){
+                ketemu = 1;
+            }
+        }
+        if (ketemu == 1){
+            printf("Masukkan Tahun : "); 
+            scanf("%s", string2);
+            DataPenyakit(string1, string2, opsi); 
+        }
+        else{
+            printf("Bulan tidak Valid"); 
+        }
     }
     else if(opsi == 2){
-        printf("Masukkan Nama Tahun : "); 
-        scanf("%s", string); 
-        DataPenyakit(string, opsi); 
+        printf("Masukkan Tahun : ");  
+        scanf("%s", string2);
+        DataPenyakit("1", string2, opsi); 
     }
     else{
         printf("Tidak Valid"); 
