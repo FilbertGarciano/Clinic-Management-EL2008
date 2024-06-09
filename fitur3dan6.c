@@ -39,7 +39,7 @@ void Pasien(DataPasien **head){
         data->Umur = atoi(token); 
         token = strtok(NULL, ",");
         strcpy(data->BPJS, token);
-        token = strtok(NULL, ",");
+        token = strtok(NULL, "\n");
         strcpy(data->ID, token);
         data->next = NULL;
         if (*head == NULL) {
@@ -86,7 +86,7 @@ void Tindakan(DataTindakan **head) {
         strcpy(data->Tindakan, token);
         token = strtok(NULL, ",");
         strcpy(data->Kontrol, token);
-        token = strtok(NULL, ",");
+        token = strtok(NULL, "\n");
         data->Biaya = atoi(token);
         data->next = NULL;
         if (*head == NULL) {
@@ -144,7 +144,7 @@ void search(DataPasien*data, char ID[]){
         if(strcasecmp(data->Nama_Lengkap, nama) == 0){
             strcpy(ID, data->ID);
             printf("Nama Lengkap : %s\n", data->Nama_Lengkap);
-            printf("ID : %s", data-> ID);
+            printf("ID : %s\n", data-> ID);
             printf("Alamat : %s\n", data->Alamat);
             printf("No BPJS : %s\n", data->BPJS);
         }
@@ -216,7 +216,8 @@ void riwayat(DataTindakan**data_T, char ID[]){
     printf("Riwayat yang dialami pengguna :\n");
     int i = 0; 
     while (head != NULL) {
-        if (strcmp(head->ID, ID) == -10) {
+        // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0
+        if (strcasecmp(head->ID, ID) == 0) {
             char ptanggal[100]; 
             TanggalRemake(head->Tanggal, ptanggal);
             add(ptanggal,head->Diagnosis, i); 
@@ -225,14 +226,18 @@ void riwayat(DataTindakan**data_T, char ID[]){
         head = head->next;
     } 
     sortPrint(i); 
+    if(i==0){
+        printf("Belum ada riwayat yang dialami pengguna. "); 
+    }
 } 
 
 // Permasalahan No 6
 void kontrol(DataPasien **data1, DataTindakan**data2){
     char input[100], ID[100]; 
-    printf("Masukkan Tanggal Kontrol dalam Format(Hari Bulan Tahun): ");
+    int banyak = 0; 
+    printf("Masukkan Tanggal Kontrol dalam Format(Contoh: 6 September 2023): ");
     scanf(" %[^\n]s", input);
-    printf("Pasien yang perlu untuk dikontrol pada tanggal %s : \n\n", input); 
+    printf("Pasien yang perlu untuk dikontrol pada tanggal %s : \n", input); 
     DataTindakan *head = *data2;
     int jumlah = 1; 
     while(head != NULL){
@@ -242,25 +247,31 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
             strcpy(ID, head->ID);
             DataPasien *body = *data1;
             while(body != NULL){
-                if (strcmp(body->ID, ID) == 10) {
+                // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0 
+                if (strcmp(body->ID, ID) == 0) {
                     printf("%d. \n", jumlah); 
                     printf("Nama : %s\n", body->Nama_Lengkap);
                     char ntanggal[100]; 
                     TanggalRemake(body->Tanggal_Lahir, ntanggal); 
                     printf("Tanggal Lahir : %s\n", ntanggal);
                     printf("Umur : %d\n", body->Umur); 
-                    printf("ID : %s", body -> ID);
+                    printf("ID : %s\n", body -> ID);
                     printf("Diagnosis : %s\n", head->Diagnosis);
                     printf("Tindakan : %s\n", head -> Tindakan);
                     printf("\n");
-                    jumlah ++; 
+                    jumlah ++;
+                    banyak ++; 
                 }
                 body = body ->next;
             }
         }
         head = head->next;
     }
+    if (banyak == 0){
+        printf("Tidak ada Pasien yang perlu dikontrol pada %s", input); 
+    }
 }
+
 
 int main(){
     DataPasien* head1 = NULL;
@@ -268,9 +279,18 @@ int main(){
     char ID[100]; 
     Pasien(&head1);
     Tindakan(&head2);
-    // Fitur no 3
-    search(head1, ID);
-    riwayat(&head2, ID);
-    // Fitur no 6
-    kontrol(&head1, &head2); 
+    int menu;
+    printf("1. Mencari Informasi Pasien dan Riwayat Medis\n"); 
+    printf("2. Memberikan Informasi Pasien yang perlu di kontrol\n"); 
+    printf("Menu : "); 
+    scanf("%d", &menu);  
+    if (menu == 1){
+        // Fitur no 3
+        search(head1, ID);
+        riwayat(&head2, ID);
+    }
+    else{
+        // Fitur no 6
+        kontrol(&head1, &head2); 
+    }
 }

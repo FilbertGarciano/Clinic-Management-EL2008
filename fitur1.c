@@ -66,15 +66,15 @@ void updatePatient(Data **head_ref, char *nama, char *alamat, char *kota, char *
 
 // Fungsi untuk menghapus data berdasarkan ID pasien
 void deletePatient(Data **head_ref, char *ID_pasien) {
-    Data *temp = *head_ref, *prev;
+    Data *temp = *head_ref, *prev = NULL;
 
-    if (temp != NULL && !strcmp(temp->ID_pasien, ID_pasien)) {
+    if (temp != NULL && strcmp(temp->ID_pasien, ID_pasien) == 0) {
         *head_ref = temp->next;
         free(temp);
         return;
     }
     // Mencari data yang perlu di-delete
-    while (temp != NULL && strcmp(temp->ID_pasien, ID_pasien)) {
+    while (temp != NULL && strcmp(temp->ID_pasien, ID_pasien) != 0) {
         prev = temp;
         temp = temp->next;
     }
@@ -108,6 +108,18 @@ void searchPatient(Data **head_ref, char *ID_pasien) {
     }
     // Jika data tidak ditemukan
     printf("\nID Pasien tidak ditemukan.\n");
+}
+
+// Fungsi untuk mengecek apakah ID masukan sama dengan yang sudah ada di database
+int cekID(Data **head, char *ID_pasien) {
+    Data *current = *head;
+    while (current != NULL) {
+        if (!strcmp(current->ID_pasien, ID_pasien)) {
+            return 1;
+        }
+        current = current->next;
+    }
+    return 0;
 }
 
 // Fungsi untuk menyamakan format bulan
@@ -164,7 +176,7 @@ void readCSV(Data **head_ref, char *filename) {
         char tempNama[100], tempAlamat[100], tempKota[100], tempKotaLahir[100], tempTanggalLahir[100], tempID[100];
         int tempUmur, tempBPJS; 
         int dummy; // untuk variabel number
-        if (sscanf(line, "%d,%[^,],%[^,],%[^,],%[^,],%[^,],%d,%d,%[^,]", &dummy, tempNama, tempAlamat, tempKota, tempKotaLahir, tempTanggalLahir, &tempUmur, &tempBPJS, tempID) == 9) {
+        if (sscanf(line, "%d,%[^,],%[^,],%[^,],%[^,],%[^,],%d,%d,%[^\n]", &dummy, tempNama, tempAlamat, tempKota, tempKotaLahir, tempTanggalLahir, &tempUmur, &tempBPJS, tempID) == 9) {
             formatDate(tempTanggalLahir);
             addPatient(head_ref, tempNama, tempAlamat, tempKota, tempKotaLahir, tempTanggalLahir, tempUmur, tempBPJS, tempID);
         } 
@@ -183,7 +195,7 @@ void writeCSV(Data **head_ref, char *filename) {
     Data *current = *head_ref;
     int id = 1;  // Penomoran data di csv
     while (current != NULL) {
-        fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%d,%s", id++, current->nama, current->alamat, current->kota, current->tempat_lahir, current->tanggal_lahir, current->umur, current->BPJS, current->ID_pasien);
+        fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%d,%s\n", id++, current->nama, current->alamat, current->kota, current->tempat_lahir, current->tanggal_lahir, current->umur, current->BPJS, current->ID_pasien);
         current = current->next;
     }
     fclose(file);
@@ -205,7 +217,7 @@ void display(Data **head) {
             printf("Tanggal Lahir   : %s\n", current->tanggal_lahir);
             printf("Umur            : %d\n", current->umur);
             printf("Nomor BPJS      : %d\n", current->BPJS);
-            printf("ID Pasien       : %s\n", current->ID_pasien);
+            printf("ID Pasien       : %s\n\n", current->ID_pasien);
             current = current->next;
         }
     }
@@ -232,7 +244,7 @@ void menu(Data **head) {
 
     do {
         printf("\n=============================================\n");
-        printf("            PROGRAM DATABASE PASIEN\n");
+        printf("              PROGRAM DATA PASIEN\n");
         printf("Menu:\n");
         printf("1. Tambah Pasien\n");
         printf("2. Update Data Pasien\n");
@@ -240,7 +252,7 @@ void menu(Data **head) {
         printf("4. Cari Data Pasien\n");
         printf("5. Tampilkan Data\n"); // testing
         printf("6. Keluar Program\n");
-        printf("\n=============================================\n");
+        printf("=============================================\n");
         printf("Masukkan pilihan (1-6): ");
         scanf("%d", &choice);
 
@@ -262,7 +274,10 @@ void menu(Data **head) {
                 scanf("%d", &BPJS);
                 printf("Masukkan nomor ID pasien: ");
                 scanf(" %[^\n]", ID_pasien);
-                addPatient(head, nama, alamat, kota, tempat_lahir, tanggal_lahir, umur, BPJS, ID_pasien);
+                if (cekID(head, ID_pasien)) {
+                    printf("ID pasien sudah digunakan!\n");
+                }
+                else addPatient(head, nama, alamat, kota, tempat_lahir, tanggal_lahir, umur, BPJS, ID_pasien);
                 break;
             case 2:
                 printf("Masukkan ID pasien: ");

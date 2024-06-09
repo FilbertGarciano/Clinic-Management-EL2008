@@ -109,7 +109,7 @@ void getAnnualRevenueReport(int year) {
 // Fungsi untuk mendapatkan rata-rata dari data pendapatan tahunan
 void getAverageAnnualRevenue() {
     int year;
-    printf("\nMasukkan tahun: ");
+    printf("\nMasukkan tahun (YYYY): ");
     scanf("%d", &year);
 
     int total_revenue = 0;
@@ -148,14 +148,20 @@ int main() {
 
         switch (choice) {
             case 1:
-                printf("\nMasukkan bulan (1-12): ");
-                scanf("%d", &month);
-                printf("Masukkan tahun: ");
+                do {
+                    printf("\nMasukkan bulan (1-12): ");
+                    scanf("%d", &month);
+                    if (month < 1 || month > 12) {
+                        printf("Bulan tidak valid. Silahkan masukkan bulan antara 1-12.\n");
+                    }
+                } while (month < 1 || month > 12);
+                
+                printf("Masukkan tahun (YYYY): ");
                 scanf("%d", &year);
                 getMonthlyRevenueReport(month, year);
                 break;
             case 2:
-                printf("\nMasukkan tahun: ");
+                printf("\nMasukkan tahun (YYYY): ");
                 scanf("%d", &year);
                 getAnnualRevenueReport(year);
                 break;
