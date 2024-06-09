@@ -135,7 +135,7 @@ void getAverageAnnualRevenue() {
 // Fungsi main
 int main() {
     int choice, month, year;
-    readCSV("Riwayat Pasien.csv");
+    readCSV("RiwayatPasien.csv");
 
     while (1) {
         printf("\nMenu:\n");
