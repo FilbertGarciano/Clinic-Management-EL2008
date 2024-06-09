@@ -133,25 +133,6 @@ void TanggalRemake(char tanggal[], char p_tanggal[]){
     }
 }
 
-
-// Permasalahan Nomor 3
-void search(DataPasien*data, char ID[]){
-    char nama[100]; 
-    printf("Masukkan Nama Pasien yang ingin dicari : "); 
-    scanf(" %[^\n]s", nama);
-    // Konversi dari nama ke ID untuk mengakses secara lebih apa saja yang telah dilakukan
-    while(data != NULL){ 
-        if(strcasecmp(data->Nama_Lengkap, nama) == 0){
-            strcpy(ID, data->ID);
-            printf("\nNama Lengkap : %s\n", data->Nama_Lengkap);
-            printf("ID : %s\n", data-> ID);
-            printf("Alamat : %s\n", data->Alamat);
-            printf("No BPJS : %s\n", data->BPJS);
-        }
-        data = data->next; 
-    }
-}
-
 // Pembuatan Sub Fungsi untuk melakukan pencetakan riwayat penyakit berdasarkan tanggal
 typedef struct {
     int hari;
@@ -211,30 +192,49 @@ void sortPrint(int n){
     }
 }
 
-void riwayat(DataTindakan**data_T, char ID[]){
+// Permasalahan Nomor 3
+void riwayat(DataTindakan** data_T, char ID[]){
     DataTindakan *head = *data_T;
     int i = 0; 
     while (head != NULL) {
-        // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0
         if (strcasecmp(head->ID, ID) == 0) {
             char ptanggal[100]; 
             TanggalRemake(head->Tanggal, ptanggal);
-            add(ptanggal,head->Diagnosis, i); 
+            add(ptanggal, head->Diagnosis, i); 
             i++; 
         }
         head = head->next;
     } 
     
-    if(i==0){
+    if (i == 0){
         printf("\nBelum ada riwayat yang dialami pengguna. \n\n"); 
-    }
-    else {
+    } else {
         printf("\nRiwayat yang dialami pengguna :\n");        
         sortPrint(i); 
         printf("\n");
     }
+}
 
-} 
+void search(DataPasien* data, DataTindakan** data_T, char ID[]){
+    char nama[100]; 
+    printf("Masukkan Nama Pasien yang ingin dicari : "); 
+    scanf(" %[^\n]s", nama);
+    while (data != NULL){ 
+        if (strcasecmp(data->Nama_Lengkap, nama) == 0){
+            strcpy(ID, data->ID);
+            printf("\nNama Lengkap : %s\n", data->Nama_Lengkap);
+            printf("ID : %s\n", data->ID);
+            printf("Alamat : %s\n", data->Alamat);
+            printf("No BPJS : %s\n", data->BPJS);
+            riwayat(data_T, ID);
+            break;
+        }
+        data = data->next; 
+        if (data == NULL) {
+            printf("Tidak ada pasien dengan nama tersebut.\n\n");
+        }
+    }
+}
 
 // Permasalahan No 6
 void kontrol(DataPasien **data1, DataTindakan**data2){
@@ -295,8 +295,7 @@ int main(){
         scanf("%d", &menu);  
         if (menu == 1){
             // Fitur no 3
-            search(head1, ID);
-            riwayat(&head2, ID);
+            search(head1, &head2, ID);
         }
         else if (menu == 2){
             // Fitur no 6
@@ -306,7 +305,7 @@ int main(){
             loop = -999; 
         }
         else{
-            printf("Menu Tidak Valid\n"); 
+            printf("Menu Tidak Valid\n\n"); 
         }
 
     }
