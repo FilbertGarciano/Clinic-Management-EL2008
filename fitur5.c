@@ -122,18 +122,19 @@ void DataPenyakit(char string1[], char string2[], int opsi){
     fclose(address);
     if (JPenyakit == 0){
         if (opsi == 1){
-            printf("Tidak ada penyakit pada Bulan Tersebut");
+            printf("Tidak ada penyakit pada bulan tersebut.\n\n");
         } 
         else{
-             printf("Tidak ada penyakit pada Tahun Tersebut");
+             printf("Tidak ada penyakit pada tahun tersebut.\n\n");
         }
     }
     else{
-        printf("Jumlah Penyakit yang terjadi Pada saat Itu:\n");
+        printf("\nJumlah Penyakit yang terjadi Pada saat Itu:\n");
         bubbleSort(penyakit,JPenyakit); 
         for (int i = 0; i < JPenyakit; i++) {
             printf("%s %d \n", penyakit[i].penyakit, penyakit[i].banyak);
         }
+        printf("\n");
     }
 }
 
@@ -141,12 +142,13 @@ int main(){
     char string1[100], string2[100]; 
     int opsi;
     int loop = 1; 
-    printf("=========== MENU  ===========\n");
-    printf("1. Jumlah Derita Pasien per Bulan\n"); 
-    printf("2. Jumlah Derita Pasien per Tahun\n");
-    printf("3. Exit\n"); 
-    printf("==============================\n");
+
     while (loop == 1){
+        printf("=========== MENU  ===========\n");
+        printf("1. Jumlah penyakit yang diderita pasien per Bulan\n"); 
+        printf("2. Jumlah penyakit yang diderita pasien per Tahun\n");
+        printf("3. Exit\n"); 
+        printf("==============================\n");
         printf("Menu: "); 
         scanf("%d", &opsi);
         if (opsi == 1){
@@ -165,7 +167,7 @@ int main(){
                 DataPenyakit(string1, string2, opsi); 
             }
             else{
-                printf("Bulan tidak Valid"); 
+                printf("Bulan tidak valid.\n\n"); 
             }
         }
         else if(opsi == 2){
@@ -178,7 +180,7 @@ int main(){
             printf("Terima Kasih Telah Menggunakan Program ini."); 
         }
         else{
-            printf("Tidak Valid"); 
+            printf("Tidak Valid\n\n"); 
         }
     }
 }
