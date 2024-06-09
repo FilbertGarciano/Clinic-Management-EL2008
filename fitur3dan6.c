@@ -213,7 +213,6 @@ void sortPrint(int n){
 
 void riwayat(DataTindakan**data_T, char ID[]){
     DataTindakan *head = *data_T;
-    printf("Riwayat yang dialami pengguna :\n");
     int i = 0; 
     while (head != NULL) {
         // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0
@@ -225,10 +224,16 @@ void riwayat(DataTindakan**data_T, char ID[]){
         }
         head = head->next;
     } 
-    sortPrint(i); 
+    
     if(i==0){
-        printf("Belum ada riwayat yang dialami pengguna. \n"); 
+        printf("\nBelum ada riwayat yang dialami pengguna. \n\n"); 
     }
+    else {
+        printf("\nRiwayat yang dialami pengguna :\n");        
+        sortPrint(i); 
+        printf("\n");
+    }
+
 } 
 
 // Permasalahan No 6
@@ -237,7 +242,7 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
     int banyak = 0; 
     printf("Masukkan Tanggal Kontrol dalam Format (Contoh: 6 September 2023): ");
     scanf(" %[^\n]s", input);
-    printf("Pasien yang perlu untuk dikontrol pada tanggal %s : \n", input); 
+    printf("\nPasien yang perlu untuk dikontrol pada tanggal %s : \n\n", input); 
     DataTindakan *head = *data2;
     int jumlah = 1; 
     while(head != NULL){
@@ -249,7 +254,6 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
             while(body != NULL){
                 // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0 
                 if (strcmp(body->ID, ID) == 0) {
-                    printf("\n");
                     printf("Pasien ke-%d \n", jumlah); 
                     printf("Nama : %s\n", body->Nama_Lengkap);
                     char ntanggal[100]; 
@@ -258,7 +262,7 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
                     printf("Umur : %d\n", body->Umur); 
                     printf("ID : %s\n", body -> ID);
                     printf("Diagnosis : %s\n", head->Diagnosis);
-                    printf("Tindakan : %s\n", head -> Tindakan);
+                    printf("Tindakan : %s\n\n", head -> Tindakan);
                     jumlah ++;
                     banyak ++; 
                 }
@@ -268,7 +272,7 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
         head = head->next;
     }
     if (banyak == 0){
-        printf("Tidak ada Pasien yang perlu dikontrol pada %s", input); 
+        printf("Tidak ada Pasien yang perlu dikontrol pada %s\n\n", input); 
     }
 }
 
@@ -281,11 +285,13 @@ int main(){
     Tindakan(&head2);
     int menu;
     int loop = 1;
-    printf("1. Mencari Informasi Pasien dan Riwayat Medis\n"); 
-    printf("2. Memberikan Informasi Pasien yang perlu di kontrol\n");
-    printf("3. Exit\n");
     while (loop == 1){
-        printf("Menu : "); 
+        printf("=========== MENU  ===========\n");
+        printf("1. Mencari Informasi Pasien dan Riwayat Medis\n"); 
+        printf("2. Memberikan Informasi Pasien yang perlu di kontrol\n");
+        printf("3. Exit\n");
+        printf("==============================\n"); 
+        printf("Menu: "); 
         scanf("%d", &menu);  
         if (menu == 1){
             // Fitur no 3
