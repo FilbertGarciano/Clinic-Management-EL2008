@@ -186,7 +186,7 @@ void cariRiwayat(struct riwayat **head, char ID[] , int Tanggal , int Bulan , in
 
     while (tinjau != NULL) {
         if ((strcmp(tinjau->ID, ID) == 0) && (tinjau->Tanggal == Tanggal) && (tinjau->Bulan == Bulan) && (tinjau->Tahun == Tahun)){
-            printf("No: %d\n", tinjau->nomor);
+            printf("\nNo: %d\n", tinjau->nomor);
             printf("Tanggal %d ", tinjau->Tanggal);
             printf("%d ", tinjau->Bulan);
             printf("%d\n", tinjau->Tahun);
@@ -232,10 +232,7 @@ char tokenTanggal[255];
 char Vessel[255];
 char tokenKontrol[255];
 
-    printf("Masukkan Nama File: ");
-    scanf("%s", namafile);
-
-    FILE* stream = fopen(namafile, "r");
+    FILE* stream = fopen("RiwayatPasien.csv", "r");
     if (stream == NULL){
         printf("File tidak ditemukan");
         return 0;
