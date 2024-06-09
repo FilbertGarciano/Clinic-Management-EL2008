@@ -237,7 +237,7 @@ void freeList(Data **head) {
 // Fungsi untuk menu utama, asumsi input selalu benar (testing)
 void menu(Data **head) {
     // Membaca file awal
-    readCSV(head, "Data Pasien.csv");
+    readCSV(head, "DataPasien.csv");
     int choice;
     char nama[100], alamat[100], kota[100], tempat_lahir[100], tanggal_lahir[100], ID_pasien[100];
     int umur, BPJS;
@@ -314,7 +314,7 @@ void menu(Data **head) {
                 break;
             case 6:
                 printf("MENUTUP PROGRAM...\n");
-                writeCSV(head, "Data Pasien.csv"); // Update file csv
+                writeCSV(head, "DataPasien.csv"); // Update file csv
                 freeList(head);
                 printf("PROGRAM BERHASIL DITUTUP.\n");
                 break;
