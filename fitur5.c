@@ -70,7 +70,7 @@ void DataPenyakit(char string1[], char string2[], int opsi){
     char wabah[100]; 
     char *token;
     char tanggal[100]; 
-    address = fopen("Riwayat Pasien.csv", "r");
+    address = fopen("RiwayatPasien.csv", "r");
     while (fgets(line, sizeof(line), address)) {
         token = strtok(line, ",");  // No
         token = strtok(NULL, ","); // Tanggal
@@ -129,7 +129,7 @@ void DataPenyakit(char string1[], char string2[], int opsi){
         }
     }
     else{
-        printf("Jumlah Penyakit yang terjadi Pada saat Itu:\n");
+        printf("\nJumlah Penyakit yang terjadi Pada saat Itu:\n");
         bubbleSort(penyakit,JPenyakit); 
         for (int i = 0; i < JPenyakit; i++) {
             printf("%s %d \n", penyakit[i].penyakit, penyakit[i].banyak);
@@ -141,8 +141,8 @@ int main(){
     char string1[100], string2[100]; 
     int opsi;
     printf("=========== MENU  ===========\n");
-    printf("1. Jumlah Derita Pasien per Bulan\n"); 
-    printf("2. Jumlah Derita Pasien per Tahun\n");
+    printf("1. Jumlah Penyakit yang diderita pasien per bulan\n"); 
+    printf("2. Jumlah Penyakit yang diderita pasien per tahun\n");
     printf("==============================\n"); 
     printf("Menu: "); 
     scanf("%d", &opsi);
