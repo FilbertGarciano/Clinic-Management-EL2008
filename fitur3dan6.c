@@ -300,7 +300,7 @@ int main(){
             loop = -999; 
         }
         else{
-            printf("Menu Tidak Valid"); 
+            printf("Menu Tidak Valid\n"); 
         }
 
     }
