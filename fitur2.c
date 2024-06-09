@@ -91,7 +91,25 @@ void parseDate(const char *date_str, int *day, int *month, int *year) {
     }
 }
 
-void tambahRiwayat(int nomor ,int Tanggal , int Bulan , int Tahun,char ID[20],char Diagnosis[50],char Tindakan[50],int TanggalKontrol , int BulanKontrol , int TahunKontrol , int biaya , struct riwayat** head) 
+int Biaya(char Tindakan[] , int Pendaftaran, int Pemeriksaan , int Vaksinasi , int Gula , int Infus , int Obat){
+    int tempBiaya = Pendaftaran + Pemeriksaan;
+
+    if (strcmp(Tindakan , "Vaksinasi") == 0){
+        tempBiaya += Vaksinasi;
+    }
+    else if(strcmp(Tindakan , "Cek gula darah") == 0){
+        tempBiaya += Gula;
+    }
+    else if(strcmp(Tindakan , "Pemasangan infus") == 0){
+        tempBiaya += Infus;
+    }
+    else if(strcmp(Tindakan , "Pengobatan") == 0){
+        tempBiaya += Obat;
+    }
+    return tempBiaya;
+}
+
+void tambahRiwayat(int nomor ,int Tanggal , int Bulan , int Tahun,char ID[20],char Diagnosis[50],char Tindakan[50],int TanggalKontrol , int BulanKontrol , int TahunKontrol  , struct riwayat** head , int Pendaftaran , int Pemeriksaan , int Vaksinasi , int Gula , int Infus , int Obat) 
 {
     struct riwayat *RiwayatBaru = (struct riwayat *)malloc(sizeof(struct riwayat));
     RiwayatBaru -> nomor = nomor; 
@@ -104,7 +122,7 @@ void tambahRiwayat(int nomor ,int Tanggal , int Bulan , int Tahun,char ID[20],ch
     RiwayatBaru -> TanggalKontrol = TanggalKontrol;
     RiwayatBaru -> BulanKontrol =BulanKontrol;
     RiwayatBaru -> TahunKontrol = TahunKontrol;
-    RiwayatBaru -> biaya = biaya;
+    RiwayatBaru -> biaya = Biaya(RiwayatBaru -> Tindakan , Pendaftaran , Pemeriksaan , Vaksinasi , Gula , Infus , Obat);
 
     struct riwayat* last = *head;
     RiwayatBaru->next = NULL;
@@ -125,7 +143,7 @@ void tambahRiwayat(int nomor ,int Tanggal , int Bulan , int Tahun,char ID[20],ch
 
 }
 
-void ubahRiwayat(struct riwayat **head, char ID[] , int Tanggal , int Bulan , int Tahun) {
+void ubahRiwayat(struct riwayat **head, char ID[] , int Tanggal , int Bulan , int Tahun , int Pendaftaran , int Pemeriksaan , int Vaksinasi , int Gula , int Infus , int Obat) {
     struct riwayat *tinjau = *head;
     struct riwayat *prev = NULL;
 
@@ -134,16 +152,20 @@ void ubahRiwayat(struct riwayat **head, char ID[] , int Tanggal , int Bulan , in
             printf("Masukkan data baru!\n");
 
             printf("Diagnosis: ");
-            scanf("%s" , tempDiagnosis);
+            scanf(" %[^\n]s", tempDiagnosis);
             strcpy(tinjau->Diagnosis , tempDiagnosis);
 
             printf("Tindakan: ");
-            scanf("%s" , tempTindakan);
+            scanf(" %[^\n]s", tempTindakan);
+            while ((strcmp(tempTindakan , "Vaksinasi") != 0) && (strcmp(tempTindakan , "Cek gula darah") != 0) && (strcmp(tempTindakan , "Pemasangan infus") != 0) && (strcmp(tempTindakan , "Pengobatan") != 0)){
+                printf("Tindakan tidak valid!\n");
+                printf("Tindakan yang valid: Vaksinasi , Cek gula darah , Pemasangan infus , atau Pengobatan\n");
+                printf("Tindakan: ");
+                scanf(" %[^\n]s", tempTindakan);
+            }
             strcpy(tinjau->Tindakan , tempTindakan);
 
-            printf("Biaya: ");
-            scanf("%d" , &tempBiaya);
-            tinjau->biaya = tempBiaya;
+            tinjau->biaya = Biaya(tinjau->Tindakan , Pendaftaran , Pemeriksaan , Vaksinasi , Gula , Infus , Obat);
 
             
             printf("Data pada tanggal %.2d-%.2d-%d dengan ID %s berhasil dimodifikasi\n",Tanggal , Bulan , Tahun , ID);
@@ -231,8 +253,37 @@ char *token;
 char tokenTanggal[255];
 char Vessel[255];
 char tokenKontrol[255];
+int Pendaftaran , Pemeriksaan , Vaksinasi , Gula , Infus , Obat;
 
-    FILE* stream = fopen("RiwayatPasien.csv", "r");
+    FILE* stream = fopen("BiayaTindakan.csv", "r");
+    for (int j = 0 ; j < 6 ; j++){
+        fgets(line, 255, stream);
+        token = strtok(line , ",");
+        token = strtok(NULL , ",");
+        token = strtok(NULL , "\n");
+
+        if(j == 0){
+            Pendaftaran = atoi(token);
+        }
+        else if(j == 1){
+            Pemeriksaan = atoi(token);
+        }
+        else if(j == 2){
+            Vaksinasi = atoi(token);   
+        }
+        else if(j == 3){
+            Gula = atoi(token);
+        }
+        else if(j == 4){
+            Infus = atoi(token);
+        }
+        else{
+            Obat = atoi(token);
+        }
+    }
+    fclose(stream);
+
+    stream = fopen("RiwayatPasien.csv", "r");
     if (stream == NULL){
         printf("File tidak ditemukan");
         return 0;
@@ -243,7 +294,7 @@ char tokenKontrol[255];
     struct riwayat* head = NULL;
     while(fgets(line, 255, stream)){
         i++;
-        while (i > 0){ // hanya diambil i>1 karena data dimulai pada baris ke 2 file
+        while (i > 0){
         strcpy(tempLine, line);
         token = strtok(tempLine, ",");
         tempNomor = atoi(token);
@@ -281,11 +332,7 @@ char tokenKontrol[255];
         //printf("BulanKontrol: %d\n" , tempBulanKontrol);
         //printf("TahunKontrol: %d\n" , tempTahunKontrol);
 
-        token = strtok(NULL, "\n");
-        tempBiaya = atoi(token);
-    //printf("Biaya: %d\n\n" , tempBiaya);
-
-        tambahRiwayat(tempNomor , tempTanggal , tempBulan , tempTahun , tempID , tempDiagnosis , tempTindakan , tempTanggalKontrol, tempBulanKontrol , tempTahunKontrol , tempBiaya , &head);
+        tambahRiwayat(tempNomor , tempTanggal , tempBulan , tempTahun , tempID , tempDiagnosis , tempTindakan , tempTanggalKontrol, tempBulanKontrol , tempTahunKontrol , &head , Pendaftaran , Pemeriksaan , Vaksinasi , Gula , Infus , Obat);
 
         fgets(line, 255, stream);
         }
@@ -333,19 +380,22 @@ char tokenKontrol[255];
             strcat(tempID , Vessel);
 
             printf("Diagnosis: ");
-            scanf("%s" , tempDiagnosis);
+            scanf(" %[^\n]s", tempDiagnosis);
 
             printf("Tindakan: ");
-            scanf("%s" , tempTindakan);
+            scanf(" %[^\n]s", tempTindakan);
+            while ((strcmp(tempTindakan , "Vaksinasi") != 0) && (strcmp(tempTindakan , "Cek gula darah") != 0) && (strcmp(tempTindakan , "Pemasangan infus") != 0) && (strcmp(tempTindakan , "Pengobatan") != 0)){
+                printf("Tindakan tidak valid!\n");
+                printf("Tindakan yang valid: Vaksinasi , Cek gula darah , Pemasangan infus , atau Pengobatan\n");
+                printf("Tindakan: ");
+                scanf(" %[^\n]s", tempTindakan);
+            }
 
             printf("Tanggal kontrol(Format : DD-MM-YYYY): ");
             scanf("%s" , tokenKontrol);
             parseDate(tokenKontrol , &tempTanggalKontrol , &tempBulanKontrol , &tempTahunKontrol);
-
-            printf("Biaya: ");
-            scanf("%d" , &tempBiaya);
             
-            tambahRiwayat(tempNomor , tempTanggal , tempBulan , tempTahun , tempID , tempDiagnosis , tempTindakan , tempTanggalKontrol, tempBulanKontrol , tempTahunKontrol , tempBiaya , &head);
+            tambahRiwayat(tempNomor , tempTanggal , tempBulan , tempTahun , tempID , tempDiagnosis , tempTindakan , tempTanggalKontrol, tempBulanKontrol , tempTahunKontrol , &head , Pendaftaran , Pemeriksaan , Vaksinasi , Gula , Infus , Obat);
 
         }
         else if(pilihanfitur == 2){
@@ -359,7 +409,7 @@ char tokenKontrol[255];
             strcat(IDUBAH , " ");
             strcat(IDUBAH , Vessel);
 
-            ubahRiwayat(&head , IDUBAH , Tanggal , Bulan , Tahun);
+            ubahRiwayat(&head , IDUBAH , Tanggal , Bulan , Tahun , Pendaftaran , Pemeriksaan , Vaksinasi , Gula , Infus , Obat);
             
         }
         else if(pilihanfitur == 3){
@@ -406,7 +456,7 @@ char tokenKontrol[255];
     }
     fclose(stream);
 
-    stream = fopen(namafile, "w");
+    stream = fopen("RiwayatPasien.csv", "w");
 
     while (head != NULL) {
         fprintf(stream , "%d,%.2d-%.2d-%.4d,%s,%s,%s,%.2d-%.2d-%.4d,%d" , head -> nomor , head -> Tanggal , head -> Bulan , head ->Tahun , head -> ID , head-> Diagnosis , head -> Tindakan , head-> TanggalKontrol , head->BulanKontrol , head->TahunKontrol , head->biaya);
