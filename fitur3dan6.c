@@ -259,7 +259,8 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
                     printf("\nPasien ke-%d \n", jumlah); 
                     printf("Nama : %s\n", body->Nama_Lengkap);
                     char ntanggal[100]; 
-                    TanggalRemake(body->Tanggal_Lahir, ntanggal); 
+                    TanggalRemake(body->Tanggal_Lahir, ntanggal);
+                    strcpy(body->Tanggal_Lahir, ntanggal);
                     printf("Tanggal Lahir : %s\n", ntanggal);
                     printf("Umur : %d\n", body->Umur); 
                     printf("ID : %s\n", body -> ID);
