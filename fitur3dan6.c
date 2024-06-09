@@ -227,7 +227,7 @@ void riwayat(DataTindakan**data_T, char ID[]){
     } 
     sortPrint(i); 
     if(i==0){
-        printf("Belum ada riwayat yang dialami pengguna. "); 
+        printf("Belum ada riwayat yang dialami pengguna. \n"); 
     }
 } 
 
