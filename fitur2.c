@@ -190,8 +190,16 @@ void hapusRiwayat(struct riwayat **head, char ID[] , int Tanggal , int Bulan , i
             } else {
                 prev->next = tinjau->next;
             }
+            while (tinjau -> next != NULL){
+                tinjau -> next -> nomor -= 1;
+                tinjau = tinjau -> next;
+            }
+            
             free(tinjau);
             printf("Data pada tanggal %.2d-%.2d-%d dengan ID %s berhasil dihapus\n",Tanggal , Bulan , Tahun , ID);
+
+            
+
             return;
         }
         prev = tinjau;
