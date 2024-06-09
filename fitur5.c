@@ -70,7 +70,7 @@ void DataPenyakit(char string1[], char string2[], int opsi){
     char wabah[100]; 
     char *token;
     char tanggal[100]; 
-    address = fopen("RiwayatPasien.csv", "r");
+    address = fopen("Riwayat Pasien.csv", "r");
     while (fgets(line, sizeof(line), address)) {
         token = strtok(line, ",");  // No
         token = strtok(NULL, ","); // Tanggal
@@ -129,7 +129,7 @@ void DataPenyakit(char string1[], char string2[], int opsi){
         }
     }
     else{
-        printf("\nJumlah Penyakit yang terjadi Pada saat Itu:\n");
+        printf("Jumlah Penyakit yang terjadi Pada saat Itu:\n");
         bubbleSort(penyakit,JPenyakit); 
         for (int i = 0; i < JPenyakit; i++) {
             printf("%s %d \n", penyakit[i].penyakit, penyakit[i].banyak);
@@ -140,39 +140,46 @@ void DataPenyakit(char string1[], char string2[], int opsi){
 int main(){
     char string1[100], string2[100]; 
     int opsi;
+    int loop = 1; 
     printf("=========== MENU  ===========\n");
-    printf("1. Jumlah Penyakit yang diderita pasien per bulan\n"); 
-    printf("2. Jumlah Penyakit yang diderita pasien per tahun\n");
-    printf("==============================\n"); 
-    printf("Menu: "); 
-    scanf("%d", &opsi);
-    if (opsi == 1){
-        printf("Masukkan Nama Bulan : "); 
-        scanf("%s", string1);
-        int ketemu = 0; 
-        char *l_bulan[] = {"Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
-        for(int i=0; i<12; i++){
-            if(strcasecmp(string1, l_bulan[i]) == 0){
-                ketemu = 1;
+    printf("1. Jumlah Derita Pasien per Bulan\n"); 
+    printf("2. Jumlah Derita Pasien per Tahun\n");
+    printf("3. Exit\n"); 
+    printf("==============================\n");
+    while (loop == 1){
+        printf("Menu: "); 
+        scanf("%d", &opsi);
+        if (opsi == 1){
+            printf("Masukkan Nama Bulan : "); 
+            scanf("%s", string1);
+            int ketemu = 0; 
+            char *l_bulan[] = {"Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+            for(int i=0; i<12; i++){
+                if(strcasecmp(string1, l_bulan[i]) == 0){
+                    ketemu = 1;
+                }
+            }
+            if (ketemu == 1){
+                printf("Masukkan Tahun : "); 
+                scanf("%s", string2);
+                DataPenyakit(string1, string2, opsi); 
+            }
+            else{
+                printf("Bulan tidak Valid"); 
             }
         }
-        if (ketemu == 1){
-            printf("Masukkan Tahun : "); 
+        else if(opsi == 2){
+            printf("Masukkan Tahun : ");  
             scanf("%s", string2);
-            DataPenyakit(string1, string2, opsi); 
+            DataPenyakit("1", string2, opsi); 
+        }
+        else if(opsi == 3){
+            loop = -999; 
+            printf("Terima Kasih Telah Menggunakan Program ini."); 
         }
         else{
-            printf("Bulan tidak Valid"); 
+            printf("Tidak Valid"); 
         }
     }
-    else if(opsi == 2){
-        printf("Masukkan Tahun : ");  
-        scanf("%s", string2);
-        DataPenyakit("1", string2, opsi); 
-    }
-    else{
-        printf("Tidak Valid"); 
-    }
 }
-
 
