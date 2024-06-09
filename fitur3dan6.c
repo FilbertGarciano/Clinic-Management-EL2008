@@ -39,7 +39,7 @@ void Pasien(DataPasien **head){
         data->Umur = atoi(token); 
         token = strtok(NULL, ",");
         strcpy(data->BPJS, token);
-        token = strtok(NULL, ",");
+        token = strtok(NULL, "\n");
         strcpy(data->ID, token);
         data->next = NULL;
         if (*head == NULL) {
@@ -86,7 +86,7 @@ void Tindakan(DataTindakan **head) {
         strcpy(data->Tindakan, token);
         token = strtok(NULL, ",");
         strcpy(data->Kontrol, token);
-        token = strtok(NULL, ",");
+        token = strtok(NULL, "\n");
         data->Biaya = atoi(token);
         data->next = NULL;
         if (*head == NULL) {
@@ -144,7 +144,7 @@ void search(DataPasien*data, char ID[]){
         if(strcasecmp(data->Nama_Lengkap, nama) == 0){
             strcpy(ID, data->ID);
             printf("Nama Lengkap : %s\n", data->Nama_Lengkap);
-            printf("ID : %s", data-> ID);
+            printf("ID : %s\n", data-> ID);
             printf("Alamat : %s\n", data->Alamat);
             printf("No BPJS : %s\n", data->BPJS);
         }
@@ -217,7 +217,7 @@ void riwayat(DataTindakan**data_T, char ID[]){
     int i = 0; 
     while (head != NULL) {
         // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0
-        if (strcasecmp(head->ID, ID) == -10) {
+        if (strcasecmp(head->ID, ID) == 0) {
             char ptanggal[100]; 
             TanggalRemake(head->Tanggal, ptanggal);
             add(ptanggal,head->Diagnosis, i); 
@@ -248,14 +248,14 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
             DataPasien *body = *data1;
             while(body != NULL){
                 // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0 
-                if (strcmp(body->ID, ID) == 10) {
+                if (strcmp(body->ID, ID) == 0) {
                     printf("%d. \n", jumlah); 
                     printf("Nama : %s\n", body->Nama_Lengkap);
                     char ntanggal[100]; 
                     TanggalRemake(body->Tanggal_Lahir, ntanggal); 
                     printf("Tanggal Lahir : %s\n", ntanggal);
                     printf("Umur : %d\n", body->Umur); 
-                    printf("ID : %s", body -> ID);
+                    printf("ID : %s\n", body -> ID);
                     printf("Diagnosis : %s\n", head->Diagnosis);
                     printf("Tindakan : %s\n", head -> Tindakan);
                     printf("\n");
