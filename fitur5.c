@@ -70,7 +70,7 @@ void DataPenyakit(char string1[], char string2[], int opsi){
     char wabah[100]; 
     char *token;
     char tanggal[100]; 
-    address = fopen("Riwayat Pasien.csv", "r");
+    address = fopen("RiwayatPasien.csv", "r");
     while (fgets(line, sizeof(line), address)) {
         token = strtok(line, ",");  // No
         token = strtok(NULL, ","); // Tanggal
