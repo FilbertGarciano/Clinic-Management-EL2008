@@ -106,8 +106,8 @@ void Tindakan(DataTindakan **head) {
 void TanggalRemake(char tanggal[], char p_tanggal[]){
     if (strchr(tanggal, '-')!= NULL) {
         char *hari = strtok(tanggal, "-");
-        char *bulan = strtok(NULL, "-");
-        char *tahun = strtok(NULL, "-");
+        char *bulan = strtok(NULL, "-"); 
+        char *tahun = strtok(NULL, " ");
         char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         char *l_bulan[] = {"Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
         int index = -1;
@@ -132,6 +132,7 @@ void TanggalRemake(char tanggal[], char p_tanggal[]){
         strcpy(p_tanggal, tanggal); 
     }
 }
+
 
 // Pembuatan Sub Fungsi untuk melakukan pencetakan riwayat penyakit berdasarkan tanggal
 typedef struct {
@@ -240,15 +241,16 @@ void search(DataPasien* data, DataTindakan** data_T, char ID[]){
 void kontrol(DataPasien **data1, DataTindakan**data2){
     char input[100], ID[100]; 
     int banyak = 0; 
+    DataTindakan *head = *data2;
+    int jumlah = 1; 
     printf("Masukkan Tanggal Kontrol dalam Format (Contoh: 6 September 2023): ");
     scanf(" %[^\n]s", input);
     printf("\nPasien yang perlu untuk dikontrol pada tanggal %s : \n", input); 
-    DataTindakan *head = *data2;
-    int jumlah = 1; 
     while(head != NULL){
         char p_tanggal[100];
         TanggalRemake(head->Kontrol,p_tanggal);
-        if (strcasecmp(p_tanggal, input) == 0) {
+        strcpy(head->Kontrol, p_tanggal); 
+        if (strcasecmp(p_tanggal, input) == 0) { 
             strcpy(ID, head->ID);
             DataPasien *body = *data1;
             while(body != NULL){
