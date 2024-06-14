@@ -103,7 +103,7 @@ void Tindakan(DataTindakan **head) {
 }
 
 // Konversi dari format tanggal "DD-MM-YY" ke "DD MM YYYY"
-void TanggalRemake(char tanggal[], char p_tanggal[]){
+void TanggalRemake_3(char tanggal[], char p_tanggal[]){
     if (strchr(tanggal, '-')!= NULL) {
         char *hari = strtok(tanggal, "-");
         char *bulan = strtok(NULL, "-"); 
@@ -111,12 +111,18 @@ void TanggalRemake(char tanggal[], char p_tanggal[]){
         char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         char *l_bulan[] = {"Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
         int index = -1;
+        int ketemu = 1; 
         for (int i = 0; i < 12; i++) {
             if (strcmp(bulan, months[i]) == 0) {
                 index = i;
+                ketemu = 0; 
                 break;
             }
         }
+        if (ketemu == 1){
+            index = atoi(bulan)-1;
+        }
+
         int tahun_int = atoi(tahun);
         if (tahun_int < 25) {
             tahun_int += 2000;
@@ -198,10 +204,11 @@ void riwayat(DataTindakan** data_T, char ID[]){
     DataTindakan *head = *data_T;
     int i = 0; 
     while (head != NULL) {
-        if (strcasecmp(head->ID, ID) == 0) {
-            char ptanggal[100]; 
-            TanggalRemake(head->Tanggal, ptanggal);
-            add(ptanggal, head->Diagnosis, i); 
+        // Antisipasi New Line
+        if (strcasecmp(head->ID, ID) == 0 || strcasecmp(head->ID, ID) == -13 || strcasecmp(head->ID, ID) == 13 ) {
+            char ptanggal[100];  
+            TanggalRemake_3(head->Tanggal, ptanggal);
+            add(ptanggal, head->Diagnosis, i);
             i++; 
         }
         head = head->next;
@@ -248,18 +255,18 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
     printf("\nPasien yang perlu untuk dikontrol pada tanggal %s : \n", input); 
     while(head != NULL){
         char p_tanggal[100];
-        TanggalRemake(head->Kontrol,p_tanggal);
+        TanggalRemake_3(head->Kontrol,p_tanggal);
         strcpy(head->Kontrol, p_tanggal); 
         if (strcasecmp(p_tanggal, input) == 0) { 
             strcpy(ID, head->ID);
             DataPasien *body = *data1;
             while(body != NULL){
                 // Apabila tidak muncul datanya, maka coba ubah ubah strcmp menjadi sama dengan 0 
-                if (strcmp(body->ID, ID) == 0) {
+                if (strcmp(body->ID, ID) == 0 || strcmp(body->ID, ID) == 13 || strcmp(body->ID, ID) == -13) {
                     printf("\nPasien ke-%d \n", jumlah); 
                     printf("Nama : %s\n", body->Nama_Lengkap);
                     char ntanggal[100]; 
-                    TanggalRemake(body->Tanggal_Lahir, ntanggal);
+                    TanggalRemake_3(body->Tanggal_Lahir, ntanggal);
                     strcpy(body->Tanggal_Lahir, ntanggal);
                     printf("Tanggal Lahir : %s\n", ntanggal);
                     printf("Umur : %d\n", body->Umur); 
@@ -279,8 +286,8 @@ void kontrol(DataPasien **data1, DataTindakan**data2){
     }
 }
 
-
-int main(){
+// Fungsi menu fitur 3
+void menuFitur3() {
     DataPasien* head1 = NULL;
     DataTindakan* head2 = NULL;
     char ID[100]; 
@@ -289,27 +296,56 @@ int main(){
     int menu;
     int loop = 1;
     while (loop == 1){
-        printf("=========== MENU  ===========\n");
+        printf("\n=============================================\n");
+        printf("      INFORMASI PASIEN DAN RIWAYAT MEDIS\n");
+        printf("Menu:\n");
         printf("1. Mencari Informasi Pasien dan Riwayat Medis\n"); 
-        printf("2. Memberikan Informasi Pasien yang perlu di kontrol\n");
-        printf("3. Exit\n");
-        printf("==============================\n"); 
-        printf("Menu: "); 
+        printf("2. Kembali ke Menu Utama\n");
+        printf("=============================================\n"); 
+        printf("Masukkan pilihan (1-2): "); 
         scanf("%d", &menu);  
         if (menu == 1){
             // Fitur no 3
             search(head1, &head2, ID);
         }
         else if (menu == 2){
-            // Fitur no 6
-            kontrol(&head1, &head2); 
-        }
-        else if(menu == 3){
             loop = -999; 
         }
         else{
-            printf("Menu Tidak Valid\n\n"); 
+            printf("Masukkan pilihan yang valid!\n"); 
         }
 
     }
+}
+
+// Fungsi menu fitur 6
+void menuFitur6() {
+    DataPasien* head1 = NULL;
+    DataTindakan* head2 = NULL;
+    char ID[100]; 
+    Pasien(&head1);
+    Tindakan(&head2);
+    int menu;
+    int loop = 1;
+    while (loop == 1){
+        printf("\n=============================================\n");
+        printf("            INFORMASI KONTROL PASIEN\n");
+        printf("Menu:\n");
+        printf("1. Memberikan Informasi Pasien yang Perlu Kembali Kontrol\n");
+        printf("2. Kembali ke Menu Utama\n");
+        printf("=============================================\n"); 
+        printf("Masukkan pilihan (1-2): "); 
+        scanf("%d", &menu);  
+        if (menu == 1){
+            // Fitur no 6
+            kontrol(&head1, &head2);
+        }
+        else if (menu == 2){
+            loop = -999; 
+        }
+        else{
+            printf("Masukkan pilihan yang valid!\n"); 
+        }
+
+    }  
 }
