@@ -8,20 +8,27 @@ typedef struct jumlah{
 
 jumlah penyakit[9999]; 
 
+// Konversi dari format tanggal "DD-MM-YY" ke "DD MM YYYY"
 void TanggalRemake(char tanggal[], char p_tanggal[]){
     if (strchr(tanggal, '-')!= NULL) {
         char *hari = strtok(tanggal, "-");
-        char *bulan = strtok(NULL, "-");
-        char *tahun = strtok(NULL, "-");
+        char *bulan = strtok(NULL, "-"); 
+        char *tahun = strtok(NULL, " ");
         char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         char *l_bulan[] = {"Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
         int index = -1;
+        int ketemu = 1; 
         for (int i = 0; i < 12; i++) {
             if (strcmp(bulan, months[i]) == 0) {
                 index = i;
+                ketemu = 0; 
                 break;
             }
         }
+        if (ketemu == 1){
+            index = atoi(bulan)-1;
+        }
+
         int tahun_int = atoi(tahun);
         if (tahun_int < 25) {
             tahun_int += 2000;
@@ -184,4 +191,3 @@ int main(){
         }
     }
 }
-
